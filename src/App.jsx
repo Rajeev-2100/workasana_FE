@@ -7,7 +7,8 @@ function App() {
 
   const [isSignup, setIsSignup] = useState(true);
 
-  const [email, setEmail] = useState('')
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [message, setMessage] = useState("");
@@ -16,8 +17,9 @@ function App() {
   const handleSignup = async () => {
     setMessage("");
 
-    if (!email || !password) {
-      setMessage("Please enter email and password");
+    // 1. Validate all fields for signup
+    if (!name || !email || !password) {
+      setMessage("Please enter name, email, and password");
       setMessageType("error");
       return;
     }
@@ -25,28 +27,27 @@ function App() {
     try {
       const response = await fetch("http://localhost:3000/api/add-user", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await response.json();
 
-      if (response.status === 201) {
+      if (response.ok) { // response.ok is true for status 200-299
         setMessage("Signup Successful. Please Login.");
         setMessageType("success");
         setIsSignup(false);
-
+        
+        // Clear fields after successful signup
+        setName("");
+        setEmail("");
+        setPassword("");
       } else {
-        setMessage(data.error);
+        setMessage(data.error || "Signup failed");
         setMessageType("error");
       }
-    } catch {
-      setMessage("Network Error");
+    } catch (error) {
+      setMessage("Network Error. Please try again.");
       setMessageType("error");
     }
   };
@@ -54,6 +55,7 @@ function App() {
   const handleLogin = async () => {
     setMessage("");
 
+    // 1. Validate only email and password for login
     if (!email || !password) {
       setMessage("Please enter email and password");
       setMessageType("error");
@@ -63,30 +65,25 @@ function App() {
     try {
       const response = await fetch("http://localhost:3000/api/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
-      if (response.status === 200) {
+      if (response.ok) {
         localStorage.setItem("token", data.token);
-
         setMessage("Login Successful");
         setMessageType("success");
-
+        
+        // Navigate to dashboard
         navigate("/dashboardPage");
       } else {
-        setMessage(data.error);
+        setMessage(data.error || "Login failed");
         setMessageType("error");
       }
-    } catch {
-      setMessage("Network Error");
+    } catch (error) {
+      setMessage("Network Error. Please try again.");
       setMessageType("error");
     }
   };
@@ -94,40 +91,37 @@ function App() {
   return (
     <main
       className="d-flex justify-content-center align-items-center"
-      style={{
-        width: "100%",
-        height: "100vh",
-        background: "#f5f5f5",
-      }}
+      style={{ width: "100%", height: "100vh", background: "#f5f5f5" }}
     >
-      <div
-        className="bg-white shadow rounded p-4"
-        style={{ width: "420px" }}
-      >
-        <h3 className="text-center text-primary mb-4">Workasana</h3>
+      <div className="bg-white shadow rounded p-4" style={{ width: "420px" }}>
+        <h3 className="text-center text-primary mb-4">WorkSpaceHub</h3>
 
         <h5>{isSignup ? "Create Account" : "Login"}</h5>
-
         <p className="text-muted">
-          {isSignup
-            ? "Please create your account."
-            : "Please login to continue."}
+          {isSignup ? "Please create your account." : "Please login to continue."}
         </p>
 
         {message && (
-          <div
-            className={`alert ${
-              messageType === "success"
-                ? "alert-success"
-                : "alert-danger"
-            }`}
-          >
+          <div className={`alert ${messageType === "success" ? "alert-success" : "alert-danger"}`}>
             {message}
           </div>
         )}
 
-        <label>Email</label>
+        {/* Name field only shows during Signup */}
+        {isSignup && (
+          <>
+            <label className="form-label">Name</label>
+            <input
+              type="text"
+              className="form-control mb-3"
+              placeholder="Enter your Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </>
+        )}
 
+        <label className="form-label">Email</label>
         <input
           className="form-control mb-3"
           type="email"
@@ -136,8 +130,7 @@ function App() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <label>Password</label>
-
+        <label className="form-label">Password</label>
         <input
           className="form-control mb-3"
           type="password"
@@ -148,17 +141,13 @@ function App() {
 
         {isSignup ? (
           <>
-            <button
-              className="btn btn-primary w-100"
-              onClick={handleSignup}
-            >
+            <button className="btn btn-primary w-100" onClick={handleSignup}>
               Sign Up
             </button>
-
-            <p className="text-center mt-3">
-              Already have an account?
+            <p className="text-center mt-3 mb-0">
+              Already have an account?{" "}
               <button
-                className="btn btn-link"
+                className="btn btn-link p-0"
                 onClick={() => {
                   setIsSignup(false);
                   setMessage("");
@@ -170,17 +159,13 @@ function App() {
           </>
         ) : (
           <>
-            <button
-              className="btn btn-success w-100"
-              onClick={handleLogin}
-            >
+            <button className="btn btn-success w-100" onClick={handleLogin}>
               Login
             </button>
-
-            <p className="text-center mt-3">
-              Don't have an account?
+            <p className="text-center mt-3 mb-0">
+              Don't have an account?{" "}
               <button
-                className="btn btn-link"
+                className="btn btn-link p-0"
                 onClick={() => {
                   setIsSignup(true);
                   setMessage("");

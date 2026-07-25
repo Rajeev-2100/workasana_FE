@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 
 const ProjectPage = () => {
     const { getAllProjectDetails } = useContext(ProjectContext)
-    console.log(getAllProjectDetails)
+    // console.log(getAllProjectDetails)
     return (
         <>
         <div className=""></div>
