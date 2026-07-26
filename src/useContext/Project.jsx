@@ -4,7 +4,6 @@ const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
-  const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -19,46 +18,15 @@ export const ProjectProvider = ({ children }) => {
   const getAllProjectDetails = async () => {
     setLoading(true);
     setError(null);
-
     try {
       const response = await fetch(`${hostedUrl}/all-project`);
       const data = await response.json();
-
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error(data.error || "Failed to fetch projects");
-      }
-
       setProjects(data.data);
       return data.data;
     } catch (error) {
       setError(error.message);
-      console.error("Project Fetch Error:", error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ===========================
-  // Get All Tasks
-  // ===========================
-  const getAllTaskDetails = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`${hostedUrl}/all-task`);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch tasks");
-      }
-
-      setTasks(data.data);
-      return data.data;
-    } catch (error) {
-      setError(error.message);
-      console.error("Task Fetch Error:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -71,20 +39,14 @@ export const ProjectProvider = ({ children }) => {
   const getAllUserDetails = async () => {
     setLoading(true);
     setError(null);
-
     try {
       const response = await fetch(`${hostedUrl}/all-user`);
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch users");
-      }
-
+      if (!response.ok) throw new Error(data.error || "Failed to fetch users");
       setUsers(data?.data);
       return data.data;
     } catch (error) {
       setError(error.message);
-      console.error("User Fetch Error:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -97,20 +59,14 @@ export const ProjectProvider = ({ children }) => {
   const getAllTeamDetails = async () => {
     setLoading(true);
     setError(null);
-
     try {
       const response = await fetch(`${hostedUrl}/all-team`);
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch teams");
-      }
-
+      if (!response.ok) throw new Error(data.error || "Failed to fetch teams");
       setTeams(data.data);
       return data.data;
     } catch (error) {
       setError(error.message);
-      console.error("Team Fetch Error:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -123,27 +79,19 @@ export const ProjectProvider = ({ children }) => {
   const createProject = async (projectData) => {
     setLoading(true);
     setError(null);
-
     try {
       const response = await fetch(`${hostedUrl}/add-project`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(projectData),
       });
-
       const data = await response.json();
-
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error(data.error || "Failed to create project");
-      }
-
       setProjects((prev) => [...prev, data.data]);
       return data.data;
     } catch (error) {
       setError(error.message);
-      console.error("Create Project Error:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -151,58 +99,75 @@ export const ProjectProvider = ({ children }) => {
   };
 
   // ===========================
-  // Create Task
+  // Delete Project
   // ===========================
-  const createTask = async (taskData) => {
+  const deleteProject = async (projectId) => {
     setLoading(true);
     setError(null);
-
     try {
-      const response = await fetch(`${hostedUrl}/add-task`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(taskData),
+      const response = await fetch(`${hostedUrl}/delete-project/${projectId}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+      if (!response.ok)
+        throw new Error(data.error || "Failed to delete project");
+
+      // Remove from local state immediately
+      setProjects((prev) => prev.filter((p) => p._id !== projectId));
+      return data;
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ===========================
+  // Update Project
+  // ===========================
+  const updateProject = async (projectId, updateData) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${hostedUrl}/update-project/${projectId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateData),
       });
 
+      console.log('Response:', response)
       const data = await response.json();
+      if (!response.ok)
+        throw new Error(data.error || "Failed to update project");
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to create task");
-      }
-
-      setTasks((prev) => [...prev, data.data]);
+      // Update local state immediately
+      setProjects((prev) =>
+        prev.map((p) => (p._id === projectId ? data?.data : p)),
+      );
       return data.data;
     } catch (error) {
       setError(error.message);
-      console.error("Create Task Error:", error);
       throw error;
     } finally {
       setLoading(false);
     }
   };
-
-  // console.log("Projects:", projects);
-  // console.log("Tasks:", tasks);
-  // console.log("Users:", users);
-  // console.log("Teams:", teams);
 
   return (
     <ProjectContext.Provider
       value={{
         projects,
-        tasks,
         users,
         teams,
         loading,
         error,
         getAllProjectDetails,
-        getAllTaskDetails,
         getAllUserDetails,
         getAllTeamDetails,
         createProject,
-        createTask,
+        deleteProject,
+        updateProject,
       }}
     >
       {children}
@@ -212,11 +177,9 @@ export const ProjectProvider = ({ children }) => {
 
 export const useProjects = () => {
   const context = useContext(ProjectContext);
-
   if (!context) {
     throw new Error("useProjects must be used within a ProjectProvider");
   }
-
   return context;
 };
 

@@ -2,7 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useProjects } from "../useContext/Project";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import TaskContext from "../useContext/Task";
 
 const DashboardPage = () => {
   const [showTask, setShowTask] = useState("none");
@@ -21,9 +22,9 @@ const DashboardPage = () => {
   // Consolidated Task State for cleaner management
   const [newTaskData, setNewTaskData] = useState({
     name: "",
-    project: "", // Will store ObjectId string
-    team: "", // Will store ObjectId string
-    owners: [], // Will store array of ObjectId strings
+    project: "",
+    team: "",
+    owners: [],
     tags: "",
     status: "To Do",
     timeToComplete: 0,
@@ -39,7 +40,19 @@ const DashboardPage = () => {
 
   const navigate = useNavigate();
 
-  const { projects, tasks, loading, error, users, teams, getAllProjectDetails, getAllTaskDetails, getAllUserDetails, getAllTeamDetails, createProject, createTask } = useProjects();
+  const {
+    projects,
+    loading,
+    error,
+    users,
+    teams,
+    getAllProjectDetails,
+    getAllTeamDetails,
+    getAllUserDetails,
+    createProject,
+  } = useProjects();
+
+  const { tasks, getAllTaskDetails, createTask } = useContext(TaskContext);
 
   const handleLogout = () => {
     navigate("/");
@@ -79,7 +92,6 @@ const DashboardPage = () => {
             const query = searchQuery.toLowerCase();
             const nameMatch = task.name?.toLowerCase().includes(query);
 
-            // Check if owner name or ID matches
             const ownerMatch = Array.isArray(task.owners)
               ? task.owners.some((o) =>
                   (typeof o === "string" ? o : o.name)
@@ -90,7 +102,6 @@ const DashboardPage = () => {
                 ? task.owners.toLowerCase().includes(query)
                 : false;
 
-            // Check if any tag matches
             const tagMatch = Array.isArray(task.tags)
               ? task.tags.some((t) => t.toLowerCase().includes(query))
               : false;
@@ -102,7 +113,7 @@ const DashboardPage = () => {
         })
       : [];
 
-  // COLLAPSE LOGIC: Only show first 4 items unless expanded ---
+  // COLLAPSE LOGIC: Only show first 4 items unless expanded
   const displayProjects = showAllProjects
     ? filteredProjects
     : filteredProjects.slice(0, 4);
@@ -181,8 +192,6 @@ const DashboardPage = () => {
         status: newTaskData.status,
         dueDate: newTaskData.dueDate || undefined,
       };
-
-      console.log("Creating task with payload:", payload);
 
       await createTask(payload);
 
@@ -294,6 +303,15 @@ const DashboardPage = () => {
                   </li>
                   <li className="nav-item w-100">
                     <Link
+                      to="/tasks"
+                      className="nav-link text-secondary align-middle px-0 d-flex gap-3 align-items-center"
+                    >
+                      <i className="bi bi-journal-check"></i>
+                      <span className="ms-1 d-none d-sm-inline">Task</span>
+                    </Link>
+                  </li>
+                  <li className="nav-item w-100">
+                    <Link
                       to="/team"
                       className="nav-link text-secondary align-middle px-0 d-flex gap-3 align-items-center"
                     >
@@ -345,12 +363,10 @@ const DashboardPage = () => {
             <div className="col p-4 bg-white">
               {/* Search Bar */}
               <div className="mb-4">
-                <div
-                  className="input-group shadow-sm overflow-hidden w-100"
-                >
+                <div className="input-group shadow-sm overflow-hidden w-100">
                   <input
                     type="text"
-                    className="form-control  py-2 ps-4"
+                    className="form-control py-2 ps-4"
                     placeholder="Search projects, tasks, or owners..."
                     aria-label="Search"
                     value={searchQuery}
@@ -363,7 +379,9 @@ const DashboardPage = () => {
                     title={searchQuery ? "Clear search" : "Search"}
                   >
                     <i
-                      className={`bi ${searchQuery ? "bi-x-circle-fill" : "bi-search"}`}
+                      className={`bi ${
+                        searchQuery ? "bi-x-circle-fill" : "bi-search"
+                      }`}
                     ></i>
                   </button>
                 </div>
@@ -402,31 +420,39 @@ const DashboardPage = () => {
                 {projects && projects.length > 0 ? (
                   <>
                     <div className="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3">
+                      {/* ✅ FIXED: Correct Link navigation and key placement */}
                       {displayProjects.map((project, index) => (
                         <div key={project._id || index} className="col">
-                          <div className="card h-100 border-0 shadow-sm p-3 bg-light">
-                            <span
-                              className={`badge mb-2 ${getStatusBadgeClass(project.status)}`}
-                              style={{
-                                width: "fit-content",
-                                fontSize: "0.75rem",
-                              }}
-                            >
-                              {project.status || "Active"}
-                            </span>
-                            <h6 className="card-title fw-bold mb-2 text-dark">
-                              {project.name ||
-                                project.title ||
-                                `Project ${index + 1}`}
-                            </h6>
-                            <p
-                              className="card-text text-muted small mb-0"
-                              style={{ fontSize: "0.8rem" }}
-                            >
-                              {project.description ||
-                                "This project centers around compiling a digital moodboard to set the visual direction..."}
-                            </p>
-                          </div>
+                          <Link
+                            to={`/projects/${project._id}`}
+                            className="text-decoration-none text-dark"
+                          >
+                            <div className="card h-100 border-0 shadow-sm p-3 bg-light">
+                              <span
+                                className={`badge mb-2 ${getStatusBadgeClass(
+                                  project.status
+                                )}`}
+                                style={{
+                                  width: "fit-content",
+                                  fontSize: "0.75rem",
+                                }}
+                              >
+                                {project.status || "Active"}
+                              </span>
+                              <h6 className="card-title fw-bold mb-2 text-dark">
+                                {project.name ||
+                                  project.title ||
+                                  `Project ${index + 1}`}
+                              </h6>
+                              <p
+                                className="card-text text-muted small mb-0"
+                                style={{ fontSize: "0.8rem" }}
+                              >
+                                {project.description ||
+                                  "This project centers around compiling a digital moodboard to set the visual direction..."}
+                              </p>
+                            </div>
+                          </Link>
                         </div>
                       ))}
                     </div>
@@ -476,7 +502,7 @@ const DashboardPage = () => {
                           <option key={status} value={status}>
                             {status}
                           </option>
-                        ),
+                        )
                       )}
                     </select>
                   </div>
@@ -491,44 +517,52 @@ const DashboardPage = () => {
                 {filteredTasks.length > 0 ? (
                   <>
                     <div className="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3">
+                      {/* ✅ FIXED: Made Task cards clickable with Link */}
                       {displayTasks.map((task) => (
                         <div key={task._id} className="col">
-                          <div className="card h-100 border-0 shadow-sm p-3 bg-light">
-                            <span
-                              className={`badge mb-2 ${getStatusBadgeClass(task.status)}`}
-                              style={{
-                                width: "fit-content",
-                                fontSize: "0.75rem",
-                              }}
-                            >
-                              {task.status || "To Do"}
-                            </span>
-                            <h6 className="card-title fw-bold mb-2 text-dark">
-                              {task.name || "Untitled Task"}
-                            </h6>
-                            <p
-                              className="text-muted small mb-3"
-                              style={{ fontSize: "0.8rem" }}
-                            >
-                              <i className="bi bi-calendar me-1"></i>Due on:{" "}
-                              {task.dueDate
-                                ? new Date(task.dueDate).toLocaleDateString()
-                                : "20th Dec 2024"}
-                            </p>
-                            <div className="d-flex align-items-center gap-2">
-                              <div
-                                className="rounded-circle bg-primary d-flex align-items-center justify-content-center"
-                                style={{ width: "28px", height: "28px" }}
+                          <Link
+                            to={`/tasks/${task._id}`}
+                            className="text-decoration-none text-dark"
+                          >
+                            <div className="card h-100 border-0 shadow-sm p-3 bg-light">
+                              <span
+                                className={`badge mb-2 ${getStatusBadgeClass(
+                                  task.status
+                                )}`}
+                                style={{
+                                  width: "fit-content",
+                                  fontSize: "0.75rem",
+                                }}
                               >
-                                <span className="text-white small fw-bold">
-                                  {task.team?.name?.charAt(0) || "U"}
+                                {task.status || "To Do"}
+                              </span>
+                              <h6 className="card-title fw-bold mb-2 text-dark">
+                                {task.name || "Untitled Task"}
+                              </h6>
+                              <p
+                                className="text-muted small mb-3"
+                                style={{ fontSize: "0.8rem" }}
+                              >
+                                <i className="bi bi-calendar me-1"></i>Due on:{" "}
+                                {task.dueDate
+                                  ? new Date(task.dueDate).toLocaleDateString()
+                                  : "20th Dec 2024"}
+                              </p>
+                              <div className="d-flex align-items-center gap-2">
+                                <div
+                                  className="rounded-circle bg-primary d-flex align-items-center justify-content-center"
+                                  style={{ width: "28px", height: "28px" }}
+                                >
+                                  <span className="text-white small fw-bold">
+                                    {task.team?.name?.charAt(0) || "U"}
+                                  </span>
+                                </div>
+                                <span className="small text-muted">
+                                  {task.team?.name || "Unassigned"}
                                 </span>
                               </div>
-                              <span className="small text-muted">
-                                {task.team?.name || "Unassigned"}
-                              </span>
                             </div>
-                          </div>
+                          </Link>
                         </div>
                       ))}
                     </div>
@@ -656,7 +690,6 @@ const DashboardPage = () => {
         )}
 
         {/* 2. NEW TASK MODAL */}
-
         {showTaskModal && (
           <div
             className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
@@ -757,7 +790,7 @@ const DashboardPage = () => {
                       value={newTaskData.owners}
                       onChange={(e) => {
                         const selectedOptions = Array.from(
-                          e.target.selectedOptions,
+                          e.target.selectedOptions
                         ).map((option) => option.value);
                         setNewTaskData({
                           ...newTaskData,
@@ -765,12 +798,11 @@ const DashboardPage = () => {
                         });
                       }}
                       required
-                      style={{ minHeight: "100px" }}
                     >
                       {users && users.length > 0 ? (
                         users.map((user) => (
                           <option key={user._id} value={user._id}>
-                            {user.name} ({user.email})
+                            {user.name}
                           </option>
                         ))
                       ) : (
