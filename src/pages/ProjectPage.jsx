@@ -62,97 +62,89 @@ const ProjectPage = () => {
         <div className="d-flex min-vh-100 bg-white">
           {/* Sidebar */}
           <div
-            className="d-flex flex-column"
-            style={{
-              width: "260px",
-              backgroundColor: "#f0e6ff",
-              minHeight: "100vh",
-              borderRight: "1px solid #e0e0e0",
-            }}
+            className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 border-end min-vh-100"
+            style={{ backgroundColor: "#f0e6ff" }}
           >
-            <div className="p-4">
-              <Link to="/dashboardPage" className="text-decoration-none">
-                <h2
-                  className="fw-bold mb-0"
-                  style={{ color: "#6c5ce7", fontSize: "1.5rem" }}
+            <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-4 h-100 min-vh-100 position-relative">
+              <Link
+                to="/dashboardPage"
+                className="d-flex align-items-center pb-3 mb-md-4 me-md-auto text-decoration-none w-100"
+              >
+                <span
+                  className="fs-3 fw-bold d-none d-sm-inline"
+                  style={{ color: "#3720e5" }}
                 >
                   WorkSpaceHub
-                </h2>
+                </span>
               </Link>
-            </div>
 
-            {/* Sidebar Links */}
-            <ul className="nav flex-column px-3 gap-1 mt-3">
-              <li className="nav-item">
-                <Link
-                  to="/dashboardPage"
-                  className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
-                >
-                  <i className="bi bi-speedometer2 me-2"></i>
-                  <span>Dashboard</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/projects"
-                  className="nav-link py-2 px-3 rounded d-flex align-items-center"
-                  style={{ backgroundColor: "#e8e0ff", color: "#6c5ce7" }}
-                >
-                  <i className="bi bi-folder me-2"></i>
-                  <span>Project</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/tasks"
-                  className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
-                >
-                  <i className="bi bi-journal-check me-2"></i>
-                  <span>Task</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/team"
-                  className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
-                >
-                  <i className="bi bi-people me-2"></i>
-                  <span>Team</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/reports"
-                  className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
-                >
-                  <i className="bi bi-graph-up me-2"></i>
-                  <span>Reports</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/setting"
-                  className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
-                >
-                  <i className="bi bi-gear me-2"></i>
-                  <span>Setting</span>
-                </Link>
-              </li>
-            </ul>
+              <ul className="nav flex-column px-3 gap-1 mt-3">
+                <li className="nav-item">
+                  <Link
+                    to="/dashboardPage"
+                    className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                    style={{ backgroundColor: "#e8e0ff", color: "#6c5ce7" }}
+                  >
+                    <i className="bi bi-speedometer2 me-2"></i>
+                    <span>Dashboard</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/projects"
+                    className="nav-link text-primary py-2 px-3 rounded d-flex align-items-center"
+                  >
+                    <i className="bi bi-folder me-2"></i>
+                    <span>Project</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/tasks"
+                    className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                  >
+                    <i className="bi bi-journal-check me-2"></i>
+                    <span>Task</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/teams"
+                    className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                  >
+                    <i className="bi bi-people me-2"></i>
+                    <span>Team</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/reports"
+                    className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                  >
+                    <i className="bi bi-graph-up me-2"></i>
+                    <span>Reports</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/setting"
+                    className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                  >
+                    <i className="bi bi-gear me-2"></i>
+                    <span>Setting</span>
+                  </Link>
+                </li>
+              </ul>
 
-            {/* Project Card Link (inside map) */}
-            <Link to={`/project`} className="text-decoration-none">
-              {/* ... card content ... */}
-            </Link>
-
-            <div className="mt-auto p-3">
-              <button
-                onClick={() => navigate("/")}
-                className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
-              >
-                <i className="bi bi-box-arrow-right"></i>
-                <span>Logout</span>
-              </button>
+              <div
+                className="w-100 px-3 pb-4"
+                style={{
+                  position: "absolute",
+                  bottom: "0",
+                  left: "0",
+                  right: "0",
+                }}
+              ></div>
             </div>
           </div>
 

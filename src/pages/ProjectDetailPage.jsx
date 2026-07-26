@@ -14,11 +14,11 @@ const ProjectDetailPage = () => {
     users,
     getAllProjectDetails,
     getAllUserDetails,
-    deleteProject, 
-    updateProject, 
+    deleteProject,
+    updateProject,
   } = useContext(ProjectContext);
 
-  const {tasks, getAllTaskDetails} = useContext(TaskContext)
+  const { tasks, getAllTaskDetails } = useContext(TaskContext);
 
   // Filter and Sort States
   const [filterType, setFilterType] = useState("all");
@@ -110,7 +110,11 @@ const ProjectDetailPage = () => {
 
   // ✅ Handle Delete Project
   const handleDeleteProject = async () => {
-    if (window.confirm("Are you sure you want to delete this project? This action cannot be undone.")) {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this project? This action cannot be undone.",
+      )
+    ) {
       try {
         await deleteProject(projectId);
         alert("Project deleted successfully!");
@@ -125,7 +129,6 @@ const ProjectDetailPage = () => {
   const handleUpdateProject = async (e) => {
     e.preventDefault();
     try {
-
       await updateProject(projectId, editData);
       alert("Project updated successfully!");
       setShowEditModal(false);
@@ -157,94 +160,93 @@ const ProjectDetailPage = () => {
       <main>
         <div className="d-flex min-vh-100 bg-white">
           {/* Sidebar */}
-          <div
-            className="d-flex flex-column"
-            style={{
-              width: "260px",
-              backgroundColor: "#f0e6ff",
-              minHeight: "100vh",
-              borderRight: "1px solid #e0e0e0",
-            }}
-          >
-            <div className="p-4">
-              <Link to="/dashboardPage" className="text-decoration-none">
-                <h2
-                  className="fw-bold mb-0"
-                  style={{ color: "#6c5ce7", fontSize: "1.5rem" }}
-                >
-                  WorkSpaceHub
-                </h2>
-              </Link>
-            </div>
-
-            <ul className="nav flex-column px-3 gap-1">
-              <li className="nav-item">
+           <div
+              className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 border-end min-vh-100"
+              style={{ backgroundColor: "#f0e6ff" }}
+            >
+              <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-4 h-100 min-vh-100 position-relative">
                 <Link
                   to="/dashboardPage"
-                  className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                  className="d-flex align-items-center pb-3 mb-md-4 me-md-auto text-decoration-none w-100"
                 >
-                  <i className="bi bi-speedometer2 me-3"></i>
-                  <span>Dashboard</span>
+                  <span
+                    className="fs-3 fw-bold d-none d-sm-inline"
+                    style={{ color: "#3720e5" }}
+                  >
+                    WorkSpaceHub
+                  </span>
                 </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/projects"
-                  className="nav-link active py-2 px-3 rounded d-flex align-items-center"
-                  style={{ backgroundColor: "#e8e0ff", color: "#6c5ce7" }}
-                >
-                  <i className="bi bi-folder me-3"></i>
-                  <span>Project</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/tasks"
-                  className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
-                >
-                  <i className="bi bi-journal-check me-3"></i>
-                  <span>Task</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/team"
-                  className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
-                >
-                  <i className="bi bi-people me-3"></i>
-                  <span>Team</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/reports"
-                  className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
-                >
-                  <i className="bi bi-graph-up me-3"></i>
-                  <span>Reports</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/setting"
-                  className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
-                >
-                  <i className="bi bi-gear me-3"></i>
-                  <span>Setting</span>
-                </Link>
-              </li>
-            </ul>
 
-            <div className="mt-auto p-3">
-              <button
-                onClick={() => navigate("/")}
-                className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
-              >
-                <i className="bi bi-box-arrow-right"></i>
-                <span>Logout</span>
-              </button>
+                <ul className="nav flex-column px-3 gap-1 mt-3">
+                  <li className="nav-item">
+                    <Link
+                      to="/dashboardPage"
+                      className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                      style={{ backgroundColor: "#e8e0ff", color: "#6c5ce7" }}
+                    >
+                      <i className="bi bi-speedometer2 me-2"></i>
+                      <span>Dashboard</span>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/projects"
+                      className="nav-link py-2 px-3 rounded d-flex align-items-center"
+                    >
+                      <i className="bi bi-folder me-2"></i>
+                      <span>Project</span>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/tasks"
+                      className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                    >
+                      <i className="bi bi-journal-check me-2"></i>
+                      <span>Task</span>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/teams"
+                      className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                    >
+                      <i className="bi bi-people me-2"></i>
+                      <span>Team</span>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/reports"
+                      className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                    >
+                      <i className="bi bi-graph-up me-2"></i>
+                      <span>Reports</span>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/setting"
+                      className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                    >
+                      <i className="bi bi-gear me-2"></i>
+                      <span>Setting</span>
+                    </Link>
+                  </li>
+                </ul>
+
+                <div
+                  className="w-100 px-3 pb-4"
+                  style={{
+                    position: "absolute",
+                    bottom: "0",
+                    left: "0",
+                    right: "0",
+                  }}
+                >
+                </div>
+              </div>
             </div>
-          </div>
 
           {/* Main Content Area */}
           <div className="flex-grow-1 p-4">
@@ -264,17 +266,17 @@ const ProjectDetailPage = () => {
                   </small>
                 </div>
               </div>
-              
+
               {/* ✅ ACTION BUTTONS: Edit & Delete */}
               <div className="d-flex gap-2">
-                <button 
+                <button
                   className="btn btn-outline-primary btn-sm"
                   onClick={() => setShowEditModal(true)}
                 >
                   <i className="bi bi-pencil-square me-1"></i> Edit
                 </button>
-                
-                <button 
+
+                <button
                   className="btn btn-danger btn-sm"
                   onClick={handleDeleteProject}
                 >
@@ -449,22 +451,25 @@ const ProjectDetailPage = () => {
           </div>
         </div>
       </main>
-      
+
       {/* ✅ EDIT PROJECT MODAL */}
       {showEditModal && (
-        <div 
+        <div
           className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
           style={{ zIndex: 1050, backgroundColor: "rgba(0,0,0,0.5)" }}
           onClick={() => setShowEditModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded shadow-lg p-4"
             style={{ width: "100%", maxWidth: "500px" }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h5 className="fw-bold mb-0">Edit Project</h5>
-              <button className="btn-close" onClick={() => setShowEditModal(false)}></button>
+              <button
+                className="btn-close"
+                onClick={() => setShowEditModal(false)}
+              ></button>
             </div>
             <form onSubmit={handleUpdateProject}>
               <div className="mb-3">
@@ -473,7 +478,9 @@ const ProjectDetailPage = () => {
                   type="text"
                   className="form-control"
                   value={editData?.name}
-                  onChange={(e) => setEditData({...editData, name: e.target.value})}
+                  onChange={(e) =>
+                    setEditData({ ...editData, name: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -483,14 +490,22 @@ const ProjectDetailPage = () => {
                   className="form-control"
                   rows="3"
                   value={editData?.description}
-                  onChange={(e) => setEditData({...editData, description: e.target.value})}
+                  onChange={(e) =>
+                    setEditData({ ...editData, description: e.target.value })
+                  }
                 ></textarea>
               </div>
               <div className="d-flex justify-content-end gap-2">
-                <button type="button" className="btn btn-secondary" onClick={() => setShowEditModal(false)}>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowEditModal(false)}
+                >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">Save Changes</button>
+                <button type="submit" className="btn btn-primary">
+                  Save Changes
+                </button>
               </div>
             </form>
           </div>

@@ -273,68 +273,66 @@ const DashboardPage = () => {
                 >
                   <span
                     className="fs-3 fw-bold d-none d-sm-inline"
-                    style={{ color: "#6c5ce7" }}
+                    style={{ color: "#3720e5" }}
                   >
                     WorkSpaceHub
                   </span>
                 </Link>
 
-                <ul
-                  className="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start w-100 gap-2"
-                  id="menu"
-                >
-                  <li className="nav-item w-100">
+                <ul className="nav flex-column px-3 gap-1 mt-3">
+                  <li className="nav-item">
                     <Link
                       to="/dashboardPage"
-                      className="nav-link text-secondary align-middle px-0 d-flex gap-3 align-items-center"
+                      className="nav-link text-primary py-2 px-3 rounded d-flex align-items-center"
+                      style={{ backgroundColor: "#e8e0ff", color: "#6c5ce7" }}
                     >
-                      <i className="bi bi-speedometer2"></i>
-                      <span className="ms-1 d-none d-sm-inline">Dashboard</span>
+                      <i className="bi bi-speedometer2 me-2"></i>
+                      <span>Dashboard</span>
                     </Link>
                   </li>
-                  <li className="nav-item w-100">
+                  <li className="nav-item">
                     <Link
                       to="/projects"
-                      className="nav-link text-secondary align-middle px-0 d-flex gap-3 align-items-center"
+                      className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
                     >
-                      <i className="bi bi-folder"></i>
-                      <span className="ms-1 d-none d-sm-inline">Project</span>
+                      <i className="bi bi-folder me-2"></i>
+                      <span>Project</span>
                     </Link>
                   </li>
-                  <li className="nav-item w-100">
+                  <li className="nav-item">
                     <Link
                       to="/tasks"
-                      className="nav-link text-secondary align-middle px-0 d-flex gap-3 align-items-center"
+                      className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
                     >
-                      <i className="bi bi-journal-check"></i>
-                      <span className="ms-1 d-none d-sm-inline">Task</span>
+                      <i className="bi bi-journal-check me-2"></i>
+                      <span>Task</span>
                     </Link>
                   </li>
-                  <li className="nav-item w-100">
+                  <li className="nav-item">
                     <Link
-                      to="/team"
-                      className="nav-link text-secondary align-middle px-0 d-flex gap-3 align-items-center"
+                      to="/teams"
+                      className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
                     >
-                      <i className="bi bi-people"></i>
-                      <span className="ms-1 d-none d-sm-inline">Team</span>
+                      <i className="bi bi-people me-2"></i>
+                      <span>Team</span>
                     </Link>
                   </li>
-                  <li className="nav-item w-100">
+                  <li className="nav-item">
                     <Link
                       to="/reports"
-                      className="nav-link text-secondary align-middle px-0 d-flex gap-3 align-items-center"
+                      className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
                     >
-                      <i className="bi bi-graph-up"></i>
-                      <span className="ms-1 d-none d-sm-inline">Reports</span>
+                      <i className="bi bi-graph-up me-2"></i>
+                      <span>Reports</span>
                     </Link>
                   </li>
-                  <li className="nav-item w-100">
+                  <li className="nav-item">
                     <Link
                       to="/setting"
-                      className="nav-link text-secondary align-middle px-0 d-flex gap-3 align-items-center"
+                      className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
                     >
-                      <i className="bi bi-gear"></i>
-                      <span className="ms-1 d-none d-sm-inline">Setting</span>
+                      <i className="bi bi-gear me-2"></i>
+                      <span>Setting</span>
                     </Link>
                   </li>
                 </ul>
@@ -430,7 +428,7 @@ const DashboardPage = () => {
                             <div className="card h-100 border-0 shadow-sm p-3 bg-light">
                               <span
                                 className={`badge mb-2 ${getStatusBadgeClass(
-                                  project.status
+                                  project.status,
                                 )}`}
                                 style={{
                                   width: "fit-content",
@@ -527,7 +525,7 @@ const DashboardPage = () => {
                             <div className="card h-100 border-0 shadow-sm p-3 bg-light">
                               <span
                                 className={`badge mb-2 ${getStatusBadgeClass(
-                                  task.status
+                                  task.status,
                                 )}`}
                                 style={{
                                   width: "fit-content",
@@ -790,7 +788,7 @@ const DashboardPage = () => {
                       value={newTaskData.owners}
                       onChange={(e) => {
                         const selectedOptions = Array.from(
-                          e.target.selectedOptions
+                          e.target.selectedOptions,
                         ).map((option) => option.value);
                         setNewTaskData({
                           ...newTaskData,
