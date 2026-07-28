@@ -4,8 +4,15 @@ import Footer from "../components/Footer";
 import { useProjects } from "../useContext/Project";
 import { useState, useEffect, useContext } from "react";
 import TaskContext from "../useContext/Task";
+import UserContext from "../useContext/User";
+import TeamContext from "../useContext/Teams";
 
 const DashboardPage = () => {
+  const { projects, loading, error, getAllProjectDetails, createProject } = useProjects();
+  const { users, getAllUserDetails } = useContext(UserContext);
+  const { teams, getAllTeamDetails } = useContext(TeamContext);
+  const { tasks, getAllTaskDetails, createTask } = useContext(TaskContext);
+
   const [showTask, setShowTask] = useState("none");
   const [selectedProject, setSelectedProject] = useState("none");
 
@@ -39,20 +46,6 @@ const DashboardPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
-
-  const {
-    projects,
-    loading,
-    error,
-    users,
-    teams,
-    getAllProjectDetails,
-    getAllTeamDetails,
-    getAllUserDetails,
-    createProject,
-  } = useProjects();
-
-  const { tasks, getAllTaskDetails, createTask } = useContext(TaskContext);
 
   const handleLogout = () => {
     navigate("/");
@@ -500,7 +493,7 @@ const DashboardPage = () => {
                           <option key={status} value={status}>
                             {status}
                           </option>
-                        )
+                        ),
                       )}
                     </select>
                   </div>

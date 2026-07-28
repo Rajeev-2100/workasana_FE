@@ -14,8 +14,7 @@ const ProjectPage = () => {
     status: "Active",
   });
 
-  const { projects, loading, error, getAllProjectDetails, createProject } =
-    useContext(ProjectContext);
+  const { projects, loading, error, getAllProjectDetails, createProject } = useContext(ProjectContext);
 
   useEffect(() => {
     getAllProjectDetails();

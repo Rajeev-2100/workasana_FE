@@ -13,23 +13,26 @@ import TaskPage from "./pages/TaskPage.jsx";
 import { TaskProvider } from "./useContext/Task.jsx";
 import TeamPage from "./pages/TeamPage.jsx";
 import { TeamProvider } from "./useContext/Teams.jsx";
+import { UserProvider } from "./useContext/User.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <TaskProvider>
       <ProjectProvider>
         <TeamProvider>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/dashboardPage" element={<DashboardPage />} />
-          <Route path="/projects" element={<ProjectPage />} />
-          <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
-          <Route path="/teams" element={<TeamPage />} />
-          <Route path="/tasks" element={<TaskPage />} />
-          <Route path="/tasks/:taskId" element={<TaskDetailPage />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/setting" element={<Setting />} />
-        </Routes>
+          <UserProvider>
+            <Routes>
+              <Route path="/" element={<App />} />
+              <Route path="/dashboardPage" element={<DashboardPage />} />
+              <Route path="/projects" element={<ProjectPage />} />
+              <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
+              <Route path="/teams" element={<TeamPage />} />
+              <Route path="/tasks" element={<TaskPage />} />
+              <Route path="/tasks/:taskId" element={<TaskDetailPage />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/setting" element={<Setting />} />
+            </Routes>
+          </UserProvider>
         </TeamProvider>
       </ProjectProvider>
     </TaskProvider>

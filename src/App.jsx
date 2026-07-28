@@ -37,6 +37,9 @@ function App() {
         setMessage("Signup Successful. Please Login.");
         setMessageType("success");
         setIsSignup(false);
+
+        localStorage.setItem('token', data?.token)
+        localStorage.setItem('user', JSON.stringify(data?.user))
         
         // Clear fields after successful signup
         setName("");
@@ -73,6 +76,7 @@ function App() {
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem('user', JSON.stringify(data.user))
         setMessage("Login Successful");
         setMessageType("success");
         

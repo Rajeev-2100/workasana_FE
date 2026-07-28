@@ -2,29 +2,22 @@ import { useContext, useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import ProjectContext from "../useContext/Project";
 import TaskContext from "../useContext/Task";
+import UserContext from "../useContext/User";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import TeamContext from "../useContext/Teams";
 
 const TaskDetailPage = () => {
   const { taskId } = useParams();
   const navigate = useNavigate();
 
-  const {
-    projects,
-    users,
-    teams,
-    loading,
-    getAllProjectDetails,
-    getAllUserDetails,
-    getAllTeamDetails,
-  } = useContext(ProjectContext);
-
-  const { tasks, getAllTaskDetails, deleteTask, updateTask } =
-    useContext(TaskContext) || useContext(ProjectContext);
+  const { projects, loading, getAllProjectDetails } = useContext(ProjectContext);
+  const { tasks, updateTask, getAllTaskDetails, deleteTask } = useContext(TaskContext);
+  const { users, getAllUserDetails } = useContext(UserContext);
+  const { teams, getAllTeamDetails } = useContext(TeamContext);
 
   const [editData, setEditData] = useState({
     name: "",
-    description: "",
     status: "To Do",
     dueDate: "",
     timeToComplete: 0,
@@ -45,11 +38,12 @@ const TaskDetailPage = () => {
 
   const task = tasks?.find((t) => t._id === taskId);
 
+  console.log('Task Details:', task);
+
   useEffect(() => {
     if (task) {
       setEditData({
         name: task.name || "",
-        description: task.description || "",
         status: task.status || "To Do",
         dueDate: task.dueDate
           ? new Date(task.dueDate).toISOString().split("T")[0]
@@ -109,7 +103,10 @@ const TaskDetailPage = () => {
     e.preventDefault();
     try {
       const payload = {
-        ...editData,
+        name: editData.name,
+        status: editData.status,
+        dueDate: editData.dueDate || undefined,
+        timeToComplete: Number(editData.timeToComplete) || 0,
         tags:
           typeof editData.tags === "string"
             ? editData.tags
@@ -117,6 +114,9 @@ const TaskDetailPage = () => {
                 .map((t) => t.trim())
                 .filter((t) => t)
             : editData.tags,
+        project: editData.project,
+        team: editData.team,
+        owners: editData.owners,
       };
 
       await updateTask(taskId, payload);
@@ -296,23 +296,9 @@ const TaskDetailPage = () => {
                 </div>
               </div>
 
-              {/* Main Content Card */}
+              {/* Main Content Card - No Description Section */}
               <div className="card border-0 shadow-sm mb-4">
                 <div className="card-body p-4">
-                  {/* Description Section */}
-                  <div className="mb-4">
-                    <h5 className="fw-semibold mb-3">Description</h5>
-                    <p
-                      className="text-muted mb-0"
-                      style={{ whiteSpace: "pre-wrap" }}
-                    >
-                      {task.description ||
-                        "No description provided for this task."}
-                    </p>
-                  </div>
-
-                  <hr className="my-4" />
-
                   {/* Task Details Grid */}
                   <div className="row">
                     <div className="col-lg-6">
@@ -395,7 +381,7 @@ const TaskDetailPage = () => {
                                       year: "numeric",
                                       month: "long",
                                       day: "numeric",
-                                    },
+                                    }
                                   )
                                 : "No due date"}
                             </span>
@@ -445,7 +431,7 @@ const TaskDetailPage = () => {
             </div>
           </div>
 
-          {/* Edit Modal */}
+          {/* Edit Modal - Without Description */}
           {showEditModal && (
             <div
               className="modal show d-block"
@@ -588,7 +574,7 @@ const TaskDetailPage = () => {
                             value={editData.owners}
                             onChange={(e) => {
                               const selectedOptions = Array.from(
-                                e.target.selectedOptions,
+                                e.target.selectedOptions
                               ).map((option) => option.value);
                               setEditData({
                                 ...editData,
@@ -614,22 +600,7 @@ const TaskDetailPage = () => {
                         </div>
                       </div>
 
-                      <div className="mb-3">
-                        <label className="form-label fw-semibold">
-                          Description
-                        </label>
-                        <textarea
-                          className="form-control"
-                          rows="3"
-                          value={editData.description}
-                          onChange={(e) =>
-                            setEditData({
-                              ...editData,
-                              description: e.target.value,
-                            })
-                          }
-                        ></textarea>
-                      </div>
+                      {/* Description field removed */}
 
                       <div className="row g-3 mb-3">
                         <div className="col-md-6">

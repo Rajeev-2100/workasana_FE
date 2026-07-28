@@ -4,21 +4,15 @@ import ProjectContext from "../useContext/Project";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import TaskContext from "../useContext/Task";
+import UserContext from "../useContext/User";
 
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
 
-  const {
-    projects,
-    users,
-    getAllProjectDetails,
-    getAllUserDetails,
-    deleteProject,
-    updateProject,
-  } = useContext(ProjectContext);
-
+  const { projects, getAllProjectDetails, deleteProject, updateProject } = useContext(ProjectContext);
   const { tasks, getAllTaskDetails } = useContext(TaskContext);
+  const { users, getAllUserDetails } = useContext(UserContext)
 
   // Filter and Sort States
   const [filterType, setFilterType] = useState("all");
@@ -130,6 +124,7 @@ const ProjectDetailPage = () => {
     e.preventDefault();
     try {
       await updateProject(projectId, editData);
+      console.log(projectId, editData)
       alert("Project updated successfully!");
       setShowEditModal(false);
     } catch (error) {
@@ -361,7 +356,7 @@ const ProjectDetailPage = () => {
                             {task.name}
                           </h6>
                           <small className="text-muted">
-                            {task.description || "No description"}
+                            {task.project.description || "No description"}
                           </small>
                         </div>
 

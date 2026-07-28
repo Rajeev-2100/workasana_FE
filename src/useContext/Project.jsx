@@ -4,8 +4,6 @@ const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -23,7 +21,7 @@ export const ProjectProvider = ({ children }) => {
       const data = await response.json();
       if (!response.ok)
         throw new Error(data.error || "Failed to fetch projects");
-      setProjects(data.data);
+      setProjects(data?.data);
       return data.data;
     } catch (error) {
       setError(error.message);
@@ -33,45 +31,6 @@ export const ProjectProvider = ({ children }) => {
     }
   };
 
-  // ===========================
-  // Get All Users
-  // ===========================
-  const getAllUserDetails = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${hostedUrl}/all-user`);
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to fetch users");
-      setUsers(data?.data);
-      return data.data;
-    } catch (error) {
-      setError(error.message);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ===========================
-  // Get All Teams
-  // ===========================
-  const getAllTeamDetails = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${hostedUrl}/all-team`);
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to fetch teams");
-      setTeams(data.data);
-      return data.data;
-    } catch (error) {
-      setError(error.message);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // ===========================
   // Create Project
@@ -112,7 +71,6 @@ export const ProjectProvider = ({ children }) => {
       if (!response.ok)
         throw new Error(data.error || "Failed to delete project");
 
-      // Remove from local state immediately
       setProjects((prev) => prev.filter((p) => p._id !== projectId));
       return data;
     } catch (error) {
@@ -141,7 +99,8 @@ export const ProjectProvider = ({ children }) => {
       if (!response.ok)
         throw new Error(data.error || "Failed to update project");
 
-      // Update local state immediately
+      console.log('Project Details: ',projects)
+
       setProjects((prev) =>
         prev.map((p) => (p._id === projectId ? data?.data : p)),
       );
@@ -158,16 +117,12 @@ export const ProjectProvider = ({ children }) => {
     <ProjectContext.Provider
       value={{
         projects,
-        users,
-        teams,
         loading,
         error,
-        getAllProjectDetails,
-        getAllUserDetails,
-        getAllTeamDetails,
         createProject,
         deleteProject,
         updateProject,
+        getAllProjectDetails,
       }}
     >
       {children}
