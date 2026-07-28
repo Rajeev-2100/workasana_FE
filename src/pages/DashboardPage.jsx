@@ -9,7 +9,7 @@ import TeamContext from "../useContext/Teams";
 
 const DashboardPage = () => {
   const { projects, loading, error, getAllProjectDetails, createProject } = useProjects();
-  const { users, getAllUserDetails } = useContext(UserContext);
+  const { users, getAllUserDetails, logout } = useContext(UserContext);
   const { teams, getAllTeamDetails } = useContext(TeamContext);
   const { tasks, getAllTaskDetails, createTask } = useContext(TaskContext);
 
@@ -46,10 +46,6 @@ const DashboardPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    navigate("/");
-  };
 
   useEffect(() => {
     getAllProjectDetails();
@@ -340,7 +336,7 @@ const DashboardPage = () => {
                   }}
                 >
                   <button
-                    onClick={handleLogout}
+                    onClick={logout}
                     className="btn btn-outline-secondary w-100 d-flex justify-content-center align-items-center gap-2"
                   >
                     <i className="bi bi-box-arrow-right"></i>
@@ -351,10 +347,10 @@ const DashboardPage = () => {
             </div>
 
             {/* Main Content Area */}
-            <div className="col p-4 bg-white">
+            <div className="col p-5 bg-white">
               {/* Search Bar */}
               <div className="mb-4">
-                <div className="input-group shadow-sm overflow-hidden w-100">
+                <div className="input-group shadow-sm overflow-hidden w-100 p-3">
                   <input
                     type="text"
                     className="form-control py-2 ps-4"

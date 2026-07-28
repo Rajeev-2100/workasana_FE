@@ -1,19 +1,20 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import { ProjectProvider } from "./useContext/Project.jsx";
+import { TaskProvider } from "./useContext/Task.jsx";
+import { TeamProvider } from "./useContext/Teams.jsx";
+import { UserProvider } from "./useContext/User.jsx";
 import App from "./App.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import ProjectPage from "./pages/ProjectPage.jsx";
-import Team from "./pages/TeamPage.jsx";
+import ProjectDetailPage from "./pages/ProjectDetailPage.jsx";
+import TaskPage from "./pages/TaskPage.jsx";
+import TaskDetailPage from "./pages/TaskDetailPage.jsx";
+import TeamPage from "./pages/TeamPage.jsx";
 import Reports from "./pages/Reports.jsx";
 import Setting from "./pages/Setting.jsx";
-import ProjectDetailPage from "./pages/ProjectDetailPage.jsx";
-import TaskDetailPage from "./pages/TaskDetailPage.jsx";
-import TaskPage from "./pages/TaskPage.jsx";
-import { TaskProvider } from "./useContext/Task.jsx";
-import TeamPage from "./pages/TeamPage.jsx";
-import { TeamProvider } from "./useContext/Teams.jsx";
-import { UserProvider } from "./useContext/User.jsx";
+
+import ProtectedRoute from "./components/ProtectedRoute.jsx"; 
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -23,18 +24,74 @@ createRoot(document.getElementById("root")).render(
           <UserProvider>
             <Routes>
               <Route path="/" element={<App />} />
-              <Route path="/dashboardPage" element={<DashboardPage />} />
-              <Route path="/projects" element={<ProjectPage />} />
-              <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
-              <Route path="/teams" element={<TeamPage />} />
-              <Route path="/tasks" element={<TaskPage />} />
-              <Route path="/tasks/:taskId" element={<TaskDetailPage />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/setting" element={<Setting />} />
+              <Route 
+                path="/dashboardPage" 
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/projects" 
+                element={
+                  <ProtectedRoute>
+                    <ProjectPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/projects/:projectId" 
+                element={
+                  <ProtectedRoute>
+                    <ProjectDetailPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/tasks" 
+                element={
+                  <ProtectedRoute>
+                    <TaskPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/tasks/:taskId" 
+                element={
+                  <ProtectedRoute>
+                    <TaskDetailPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/teams" 
+                element={
+                  <ProtectedRoute>
+                    <TeamPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/reports" 
+                element={
+                  <ProtectedRoute>
+                    <Reports />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/setting" 
+                element={
+                  <ProtectedRoute>
+                    <Setting />
+                  </ProtectedRoute>
+                } 
+              />
             </Routes>
           </UserProvider>
         </TeamProvider>
       </ProjectProvider>
     </TaskProvider>
-  </BrowserRouter>,
+  </BrowserRouter>
 );

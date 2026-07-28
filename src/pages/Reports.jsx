@@ -336,7 +336,7 @@ const Reports = () => {
           </div>
 
           {/* Main Content - Reports */}
-          <div className="col p-4 bg-white">
+          <div className="col p-5 bg-white">
             {/* Header */}
             <div className="d-flex justify-content-between align-items-center mb-4">
               <div>

@@ -12,6 +12,7 @@ const Setting = () => {
     changePassword,
     deleteAccount,
     loading,
+    logout  
   } = useUser();
   const navigate = useNavigate();
 
@@ -215,7 +216,7 @@ const Setting = () => {
                 }}
               >
                 <button
-                  onClick={() => navigate("/")}
+                  onClick={logout}
                   className="btn btn-outline-secondary w-100 d-flex justify-content-center align-items-center gap-2"
                 >
                   <i className="bi bi-box-arrow-right"></i>
