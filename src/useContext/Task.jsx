@@ -8,7 +8,7 @@ export const TaskProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   // Base API URL
-  const hostedUrl = "https://workasana-be.vercel.app/api";
+  const hostedUrl = "https://workasana-be-three.vercel.app";
 
   // ===========================
   // Get All Tasks

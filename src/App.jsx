@@ -25,7 +25,7 @@ function App() {
     }
 
     try {
-      const response = await fetch("https://workasana-be.vercel.app/api/add-user", {
+      const response = await fetch("https://workasana-be-three.vercel.app/add-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -66,7 +66,7 @@ function App() {
     }
 
     try {
-      const response = await fetch("https://workasana-be.vercel.app/api/login", {
+      const response = await fetch("https://workasana-be-three.vercel.app/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
