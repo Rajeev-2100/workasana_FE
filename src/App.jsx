@@ -7,7 +7,7 @@ function App() {
 
   const [isSignup, setIsSignup] = useState(true);
 
-  const hostedUrl = "https://workasana-be.vercel.app/api";
+  const hostedUrl = "https://workasana-o8vun1c17-rajeev-2100s-projects.vercel.app/api";
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
