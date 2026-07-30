@@ -7,6 +7,8 @@ function App() {
 
   const [isSignup, setIsSignup] = useState(true);
 
+  const hostedUrl = "https://workasana-be.vercel.app/api";
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,22 +27,26 @@ function App() {
     }
 
     try {
-      const response = await fetch("https://workasana-be-three.vercel.app/add-user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
+      const response = await fetch(
+        `${hostedUrl}/add-user`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password }),
+        },
+      );
 
       const data = await response.json();
 
-      if (response.ok) { // response.ok is true for status 200-299
+      if (response.ok) {
+        // response.ok is true for status 200-299
         setMessage("Signup Successful. Please Login.");
         setMessageType("success");
         setIsSignup(false);
 
-        localStorage.setItem('token', data?.token)
-        localStorage.setItem('user', JSON.stringify(data?.user))
-        
+        localStorage.setItem("token", data?.token);
+        localStorage.setItem("user", JSON.stringify(data?.user));
+
         // Clear fields after successful signup
         setName("");
         setEmail("");
@@ -66,20 +72,23 @@ function App() {
     }
 
     try {
-      const response = await fetch("https://workasana-be-three.vercel.app/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        `${hostedUrl}/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        },
+      );
 
       const data = await response.json();
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
-        localStorage.setItem('user', JSON.stringify(data.user))
+        localStorage.setItem("user", JSON.stringify(data.user));
         setMessage("Login Successful");
         setMessageType("success");
-        
+
         // Navigate to dashboard
         navigate("/dashboardPage");
       } else {
@@ -102,11 +111,15 @@ function App() {
 
         <h5>{isSignup ? "Create Account" : "Login"}</h5>
         <p className="text-muted">
-          {isSignup ? "Please create your account." : "Please login to continue."}
+          {isSignup
+            ? "Please create your account."
+            : "Please login to continue."}
         </p>
 
         {message && (
-          <div className={`alert ${messageType === "success" ? "alert-success" : "alert-danger"}`}>
+          <div
+            className={`alert ${messageType === "success" ? "alert-success" : "alert-danger"}`}
+          >
             {message}
           </div>
         )}

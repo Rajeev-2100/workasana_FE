@@ -8,7 +8,7 @@ export const ProjectProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   // Base API URL
-  const hostedUrl = "https://workasana-be-three.vercel.app";
+  const hostedUrl = "https://workasana-be.vercel.app/api";
 
   // ===========================
   // Get All Projects
