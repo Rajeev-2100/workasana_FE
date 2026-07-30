@@ -7,20 +7,21 @@ export const ProjectProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Base API URL
   const hostedUrl = "https://workasana-be.vercel.app/api";
 
-  // ===========================
-  // Get All Projects
-  // ===========================
   const getAllProjectDetails = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${hostedUrl}/all-project`);
+      const token = localStorage.getItem("token"); // ✅ ADDED
+      const response = await fetch(`${hostedUrl}/all-project`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // ✅ ADDED
+        },
+      });
       const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.error || "Failed to fetch projects");
+      if (!response.ok) throw new Error(data.error || "Failed to fetch projects");
       setProjects(data?.data);
       return data.data;
     } catch (error) {
@@ -31,22 +32,21 @@ export const ProjectProvider = ({ children }) => {
     }
   };
 
-
-  // ===========================
-  // Create Project
-  // ===========================
   const createProject = async (projectData) => {
     setLoading(true);
     setError(null);
     try {
+      const token = localStorage.getItem("token"); // ✅ ADDED
       const response = await fetch(`${hostedUrl}/add-project`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // ✅ ADDED
+        },
         body: JSON.stringify(projectData),
       });
       const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.error || "Failed to create project");
+      if (!response.ok) throw new Error(data.error || "Failed to create project");
       setProjects((prev) => [...prev, data.data]);
       return data.data;
     } catch (error) {
@@ -57,19 +57,19 @@ export const ProjectProvider = ({ children }) => {
     }
   };
 
-  // ===========================
-  // Delete Project
-  // ===========================
   const deleteProject = async (projectId) => {
     setLoading(true);
     setError(null);
     try {
+      const token = localStorage.getItem("token"); // ✅ ADDED
       const response = await fetch(`${hostedUrl}/delete-project/${projectId}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}` // ✅ ADDED
+        },
       });
       const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.error || "Failed to delete project");
+      if (!response.ok) throw new Error(data.error || "Failed to delete project");
 
       setProjects((prev) => prev.filter((p) => p._id !== projectId));
       return data;
@@ -81,29 +81,24 @@ export const ProjectProvider = ({ children }) => {
     }
   };
 
-  // ===========================
-  // Update Project
-  // ===========================
   const updateProject = async (projectId, updateData) => {
     setLoading(true);
     setError(null);
     try {
+      const token = localStorage.getItem("token"); // ✅ ADDED
       const response = await fetch(`${hostedUrl}/update-project/${projectId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // ✅ ADDED
+        },
         body: JSON.stringify(updateData),
       });
 
-      console.log('Response:', response)
       const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.error || "Failed to update project");
+      if (!response.ok) throw new Error(data.error || "Failed to update project");
 
-      console.log('Project Details: ',projects)
-
-      setProjects((prev) =>
-        prev.map((p) => (p._id === projectId ? data?.data : p)),
-      );
+      setProjects((prev) => prev.map((p) => (p._id === projectId ? data?.data : p)));
       return data.data;
     } catch (error) {
       setError(error.message);
@@ -114,17 +109,7 @@ export const ProjectProvider = ({ children }) => {
   };
 
   return (
-    <ProjectContext.Provider
-      value={{
-        projects,
-        loading,
-        error,
-        createProject,
-        deleteProject,
-        updateProject,
-        getAllProjectDetails,
-      }}
-    >
+    <ProjectContext.Provider value={{ projects, loading, error, createProject, deleteProject, updateProject, getAllProjectDetails }}>
       {children}
     </ProjectContext.Provider>
   );
@@ -132,9 +117,7 @@ export const ProjectProvider = ({ children }) => {
 
 export const useProjects = () => {
   const context = useContext(ProjectContext);
-  if (!context) {
-    throw new Error("useProjects must be used within a ProjectProvider");
-  }
+  if (!context) throw new Error("useProjects must be used within a ProjectProvider");
   return context;
 };
 

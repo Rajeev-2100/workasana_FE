@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { useState, createContext, useContext } from "react";
 
 export const TeamContext = createContext();
 
@@ -13,16 +13,21 @@ export const TeamProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${hostedUrl}/all-team`);
+      const token = localStorage.getItem("token"); // ✅ ADDED
+      const response = await fetch(`${hostedUrl}/all-team`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // ✅ ADDED
+        },
+      });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Failed to fetch teams");
       
-      // ✅ FIX: setTeams instead of setTasks
       setTeams(data.data); 
       return data.data;
     } catch (error) {
       setError(error.message);
-      console.error("Team Fetch Error:", error); // ✅ FIX: Error message
+      console.error("Team Fetch Error:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -33,9 +38,13 @@ export const TeamProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
+      const token = localStorage.getItem("token"); // ✅ ADDED
       const response = await fetch(`${hostedUrl}/add-team`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // ✅ ADDED
+        },
         body: JSON.stringify(teamData),
       });
       const data = await response.json();
@@ -45,7 +54,7 @@ export const TeamProvider = ({ children }) => {
       return data.data;
     } catch (error) {
       setError(error.message);
-      console.error("Create Team Error:", error); // ✅ FIX: Error message
+      console.error("Create Team Error:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -53,7 +62,6 @@ export const TeamProvider = ({ children }) => {
   };
 
   return (
-    // ✅ FIX: Provide the correct values and children
     <TeamContext.Provider value={{ teams, loading, error, getAllTeamDetails, createTeam }}>
       {children}
     </TeamContext.Provider>
@@ -62,10 +70,7 @@ export const TeamProvider = ({ children }) => {
 
 export const useTeam = () => {
   const context = useContext(TeamContext);
-  if (!context) {
-    // ✅ FIX: Correct error message
-    throw new Error("useTeam must be used within a TeamProvider");
-  }
+  if (!context) throw new Error("useTeam must be used within a TeamProvider");
   return context;
 };
 

@@ -21,6 +21,7 @@ const getInitialUser = () => {
         };
       }
     }
+    
   } catch (error) {
     console.error("Failed to parse user from localStorage:", error);
   }
