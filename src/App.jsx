@@ -109,7 +109,7 @@ function App() {
       <div className="bg-white shadow rounded p-4" style={{ width: "420px" }}>
         <h3 className="text-center text-primary mb-4">WorkSpaceHub</h3>
 
-        <h5>{isSignup ? "Create Account" : "Login"}</h5>
+        <h5>{isSignup === true ? "Create Account" : "Login"}</h5>
         <p className="text-muted">
           {isSignup
             ? "Please create your account."
