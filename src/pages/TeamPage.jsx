@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useTeam } from "../useContext/Teams";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify"; 
 
 const TeamPage = () => {
   const { teams, loading, error, getAllTeamDetails, createTeam } = useTeam();
@@ -30,7 +31,7 @@ const TeamPage = () => {
       setNewTeamData({ name: "", description: "" });
       setShowModal(false);
     } catch (error) {
-      alert("Failed to create team: " + error.message);
+      toast.error("Failed to create team: " + error.message);
     }
   };
 

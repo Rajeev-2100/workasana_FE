@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ProjectContext from "../useContext/Project";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { toast } from "react-toastify"; 
 
 const ProjectPage = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const ProjectPage = () => {
       setNewProjectData({ name: "", description: "", status: "Active" });
       setShowProjectModal(false);
     } catch (error) {
-      alert("Error: " + error.message);
+      toast.error("Error: " + error.message);
     }
   };
 

@@ -7,17 +7,16 @@ export const TeamProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const hostedUrl = "https://workasana-o8vun1c17-rajeev-2100s-projects.vercel.app/api";
-
+  const hostedUrl = "https://workasana-be.vercel.app/api"
   const getAllTeamDetails = async () => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); // ✅ ADDED
+      const token = localStorage.getItem("token"); 
       const response = await fetch(`${hostedUrl}/all-team`, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // ✅ ADDED
+          "Authorization": `Bearer ${token}`, 
         },
       });
       const data = await response.json();
@@ -38,12 +37,12 @@ export const TeamProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); // ✅ ADDED
+      const token = localStorage.getItem("token"); 
       const response = await fetch(`${hostedUrl}/add-team`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // ✅ ADDED
+          "Authorization": `Bearer ${token}` 
         },
         body: JSON.stringify(teamData),
       });

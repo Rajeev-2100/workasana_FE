@@ -13,8 +13,9 @@ import TaskDetailPage from "./pages/TaskDetailPage.jsx";
 import TeamPage from "./pages/TeamPage.jsx";
 import Reports from "./pages/Reports.jsx";
 import Setting from "./pages/Setting.jsx";
+import { ToastContainer } from "react-toastify";
 
-import ProtectedRoute from "./components/ProtectedRoute.jsx"; 
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -24,74 +25,86 @@ createRoot(document.getElementById("root")).render(
           <UserProvider>
             <Routes>
               <Route path="/" element={<App />} />
-              <Route 
-                path="/dashboardPage" 
+              <Route
+                path="/dashboardPage"
                 element={
                   <ProtectedRoute>
                     <DashboardPage />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/projects" 
+              <Route
+                path="/projects"
                 element={
                   <ProtectedRoute>
                     <ProjectPage />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/projects/:projectId" 
+              <Route
+                path="/projects/:projectId"
                 element={
                   <ProtectedRoute>
                     <ProjectDetailPage />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/tasks" 
+              <Route
+                path="/tasks"
                 element={
                   <ProtectedRoute>
                     <TaskPage />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/tasks/:taskId" 
+              <Route
+                path="/tasks/:taskId"
                 element={
                   <ProtectedRoute>
                     <TaskDetailPage />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/teams" 
+              <Route
+                path="/teams"
                 element={
                   <ProtectedRoute>
                     <TeamPage />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/reports" 
+              <Route
+                path="/reports"
                 element={
                   <ProtectedRoute>
                     <Reports />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/setting" 
+              <Route
+                path="/setting"
                 element={
                   <ProtectedRoute>
                     <Setting />
                   </ProtectedRoute>
-                } 
+                }
               />
             </Routes>
           </UserProvider>
         </TeamProvider>
       </ProjectProvider>
     </TaskProvider>
-  </BrowserRouter>
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+    />
+  </BrowserRouter>,
 );

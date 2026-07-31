@@ -39,8 +39,7 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const hostedUrl = "https://workasana-o8vun1c17-rajeev-2100s-projects.vercel.app/api";
-
+  const hostedUrl = "https://workasana-be.vercel.app/api"
   // User Register
   const register = async (name, email, password) => {
     setLoading(true);

@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import TaskContext from "../useContext/Task";
 import UserContext from "../useContext/User";
+import { toast } from "react-toastify";
 
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
@@ -111,10 +112,10 @@ const ProjectDetailPage = () => {
     ) {
       try {
         await deleteProject(projectId);
-        alert("Project deleted successfully!");
+        toast.success("Project deleted successfully!");
         navigate("/projects"); // Redirect back to projects list
       } catch (error) {
-        alert("Failed to delete project: " + error.message);
+        toast.error("Failed to delete project: " + error.message);
       }
     }
   };
@@ -125,10 +126,10 @@ const ProjectDetailPage = () => {
     try {
       await updateProject(projectId, editData);
       console.log(projectId, editData)
-      alert("Project updated successfully!");
+      toast.success("Project updated successfully!");
       setShowEditModal(false);
     } catch (error) {
-      alert("Failed to update project: " + error.message);
+      toast.error("Failed to update project: " + error.message);
     }
   };
 

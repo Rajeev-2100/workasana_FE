@@ -12,7 +12,8 @@
   "dependencies": {
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
-    "react-router-dom": "^7.18.1"
+    "react-router-dom": "^7.18.1",
+    "react-toastify": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

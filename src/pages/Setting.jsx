@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../useContext/User";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { toast } from "react-toastify"; 
+
 
 const Setting = () => {
   const {
@@ -50,15 +52,15 @@ const Setting = () => {
     const userId = user?._id || user?.id;
 
     if (!userId) {
-      alert("Please login again");
+      toast.warning("Please login again");
       return;
     }
 
     try {
       await updateProfile(userId, profileData);
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
     } catch (error) {
-      alert("Failed to update profile: " + error.message);
+      toast.error("Failed to update profile: " + error.message);
     }
   };
 
@@ -68,13 +70,13 @@ const Setting = () => {
     const userId = user?._id || user?.id;
 
     if (!userId) {
-      alert("Please login again");
+      toast.warning("Please login again");
       navigate("/");
       return;
     }
 
     if (passwordData.newPassword.length !== 6) {
-      alert("New password must be exactly 6 characters");
+      toast.warning("New password must be exactly 6 characters");
       return;
     }
     try {
@@ -83,10 +85,10 @@ const Setting = () => {
         passwordData.currentPassword,
         passwordData.newPassword,
       );
-      alert("Password changed successfully!");
+      toast.success("Password changed successfully!");
       setPasswordData({ currentPassword: "", newPassword: "" });
     } catch (error) {
-      alert("Failed to change password: " + error.message);
+      toast.error("Failed to change password: " + error.message);
     }
   };
 
@@ -105,10 +107,10 @@ const Setting = () => {
     if (confirmed) {
       try {
         await deleteAccount(userId);
-        alert("Account deleted successfully");
+        toast.success("Account deleted successfully");
         navigate("/");
       } catch (error) {
-        alert("Failed to delete account: " + error.message);
+        toast.error("Failed to delete account: " + error.message);
       }
     }
   };

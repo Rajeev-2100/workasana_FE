@@ -6,6 +6,8 @@ import TeamContext from '../useContext/Teams'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import UserContext from "../useContext/User";
+import { toast } from "react-toastify"; 
+
 
 const TaskPage = () => {
   const navigate = useNavigate();
@@ -80,19 +82,19 @@ const TaskPage = () => {
     e.preventDefault();
 
     if (!newTaskData.name.trim()) {
-      alert("Task name is required");
+      toast.warning("Task name is required");
       return;
     }
     if (!newTaskData.project) {
-      alert("Please select a project");
+      toast.warning("Please select a project");
       return;
     }
     if (!newTaskData.team) {
-      alert("Please select a team");
+      toast.warning("Please select a team");
       return;
     }
     if (!newTaskData.owners || newTaskData.owners.length === 0) {
-      alert("Please select at least one owner");
+      toast.warning("Please select at least one owner");
       return;
     }
 
@@ -129,7 +131,7 @@ const TaskPage = () => {
       getAllTaskDetails(); // Refresh the task list
     } catch (error) {
       console.error("Error creating task:", error);
-      alert("Failed to create task: " + error.message);
+      toast.error("Failed to create task: " + error.message);
     }
   };
 

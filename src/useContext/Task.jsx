@@ -7,17 +7,16 @@ export const TaskProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const hostedUrl = "https://workasana-o8vun1c17-rajeev-2100s-projects.vercel.app/api";
-
+  const hostedUrl = "https://workasana-be.vercel.app/api"
   const getAllTaskDetails = async () => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); // ✅ ADDED
+      const token = localStorage.getItem("token"); 
       const response = await fetch(`${hostedUrl}/all-task`, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // ✅ ADDED
+          "Authorization": `Bearer ${token}`, 
         },
       });
       const data = await response.json();
@@ -37,12 +36,12 @@ export const TaskProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); // ✅ ADDED
+      const token = localStorage.getItem("token"); 
       const response = await fetch(`${hostedUrl}/add-task`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // ✅ ADDED
+          "Authorization": `Bearer ${token}` 
         },
         body: JSON.stringify(taskData),
       });
@@ -63,11 +62,11 @@ export const TaskProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); // ✅ ADDED
+      const token = localStorage.getItem("token"); 
       const response = await fetch(`${hostedUrl}/delete-task/${taskId}`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}` // ✅ ADDED
+          "Authorization": `Bearer ${token}` 
         },
       });
       const data = await response.json();
@@ -87,12 +86,12 @@ export const TaskProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); // ✅ ADDED
+      const token = localStorage.getItem("token"); 
       const response = await fetch(`${hostedUrl}/update-task/${taskId}`, {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // ✅ ADDED
+          "Authorization": `Bearer ${token}` 
         },
         body: JSON.stringify(updateData),
       });

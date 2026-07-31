@@ -6,6 +6,7 @@ import UserContext from "../useContext/User";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import TeamContext from "../useContext/Teams";
+import { toast } from "react-toastify"; 
 
 const TaskDetailPage = () => {
   const { taskId } = useParams();
@@ -91,10 +92,10 @@ const TaskDetailPage = () => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       try {
         await deleteTask(taskId);
-        alert("Task deleted successfully!");
+        toast.success("Task deleted successfully!");
         navigate("/tasks");
       } catch (error) {
-        alert("Failed to delete task: " + error.message);
+        toast.error("Failed to delete task: " + error.message);
       }
     }
   };
@@ -120,11 +121,11 @@ const TaskDetailPage = () => {
       };
 
       await updateTask(taskId, payload);
-      alert("Task updated successfully!");
+      toast.success("Task updated successfully!");
       setShowEditModal(false);
       getAllTaskDetails();
     } catch (error) {
-      alert("Failed to update task: " + error.message);
+      toast.error("Failed to update task: " + error.message);
     }
   };
 

@@ -7,17 +7,16 @@ export const ProjectProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const hostedUrl = "https://workasana-o8vun1c17-rajeev-2100s-projects.vercel.app/api";
-
+  const hostedUrl = "https://workasana-be.vercel.app/api"
   const getAllProjectDetails = async () => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); // ✅ ADDED
+      const token = localStorage.getItem("token"); 
       const response = await fetch(`${hostedUrl}/all-project`, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // ✅ ADDED
+          "Authorization": `Bearer ${token}`, 
         },
       });
       const data = await response.json();
@@ -36,12 +35,12 @@ export const ProjectProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); // ✅ ADDED
+      const token = localStorage.getItem("token"); 
       const response = await fetch(`${hostedUrl}/add-project`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // ✅ ADDED
+          "Authorization": `Bearer ${token}` 
         },
         body: JSON.stringify(projectData),
       });
@@ -61,11 +60,11 @@ export const ProjectProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); // ✅ ADDED
+      const token = localStorage.getItem("token"); 
       const response = await fetch(`${hostedUrl}/delete-project/${projectId}`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}` // ✅ ADDED
+          "Authorization": `Bearer ${token}` 
         },
       });
       const data = await response.json();
@@ -85,12 +84,12 @@ export const ProjectProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); // ✅ ADDED
+      const token = localStorage.getItem("token"); 
       const response = await fetch(`${hostedUrl}/update-project/${projectId}`, {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // ✅ ADDED
+          "Authorization": `Bearer ${token}` 
         },
         body: JSON.stringify(updateData),
       });
