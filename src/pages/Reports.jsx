@@ -254,7 +254,7 @@ const Reports = () => {
                   className="fs-3 fw-bold d-none d-sm-inline"
                   style={{ color: "#6c5ce7" }}
                 >
-                  WorkSpaceHub
+                  workAsana
                 </span>
               </Link>
 
@@ -341,7 +341,7 @@ const Reports = () => {
             {/* Header */}
             <div className="d-flex justify-content-between align-items-center mb-4">
               <div>
-                <h1 className="fw-bold mb-1">Workasana Reports</h1>
+                <h1 className="fw-bold mb-1">workAsana Reports</h1>
                 <p className="text-muted mb-0">
                   Task completion metrics and statistics
                 </p>

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 function App() {
   const navigate = useNavigate();
   const [isSignup, setIsSignup] = useState(true);
-  const hostedUrl = "https://workasana-be.vercel.app/api";
+  const hostedUrl = "https://workAsana-be.vercel.app/api";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -88,7 +88,7 @@ function App() {
       style={{ width: "100%", height: "100vh", background: "#f5f5f5" }}
     >
       <div className="bg-white shadow rounded p-4" style={{ width: "420px" }}>
-        <h3 className="text-center text-primary mb-4">WorkSpaceHub</h3>
+        <h3 className="text-center text-primary mb-4">workAsana</h3>
         <h5>{isSignup ? "Create Account" : "Login"}</h5>
         <p className="text-muted">
           {isSignup

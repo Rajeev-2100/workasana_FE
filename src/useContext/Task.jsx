@@ -7,7 +7,7 @@ export const TaskProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const hostedUrl = "https://workasana-be.vercel.app/api"
+  const hostedUrl = "https://workAsana-be.vercel.app/api"
   const getAllTaskDetails = async () => {
     setLoading(true);
     setError(null);

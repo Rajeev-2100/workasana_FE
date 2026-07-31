@@ -10,7 +10,7 @@ const AddNewTaskForm = async () => {
         }}
       >
         <div className="bg-white shadow rounded p-4" style={{ width: "420px" }}>
-          <h3 className="text-center text-primary mb-4">Workasana</h3>
+          <h3 className="text-center text-primary mb-4">workAsana</h3>
 
           <h5>{isSignup ? "Create Account" : "Login"}</h5>
 

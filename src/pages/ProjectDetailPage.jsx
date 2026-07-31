@@ -169,7 +169,7 @@ const ProjectDetailPage = () => {
                     className="fs-3 fw-bold d-none d-sm-inline"
                     style={{ color: "#3720e5" }}
                   >
-                    WorkSpaceHub
+                    workAsana
                   </span>
                 </Link>
 
