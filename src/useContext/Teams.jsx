@@ -1,4 +1,5 @@
 import { useState, createContext, useContext } from "react";
+import { toast } from "react-toastify";
 
 export const TeamContext = createContext();
 
@@ -7,25 +8,32 @@ export const TeamProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const hostedUrl = "https://workAsana-be.vercel.app/api"
+  const hostedUrl = "https://workAsana-be.vercel.app/api";
+
   const getAllTeamDetails = async () => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found");
+
       const response = await fetch(`${hostedUrl}/all-team`, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to fetch teams");
       
-      setTeams(data.data); 
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch teams");
+      }
+
+      setTeams(data.data || []);
       return data.data;
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
       console.error("Team Fetch Error:", error);
       throw error;
     } finally {
@@ -37,22 +45,29 @@ export const TeamProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found");
+
       const response = await fetch(`${hostedUrl}/add-team`, {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` 
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(teamData),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to create Team");
       
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to create Team");
+      }
+      
+      toast.success('New Team Added');
       setTeams((prev) => [...prev, data.data]);
       return data.data;
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
       console.error("Create Team Error:", error);
       throw error;
     } finally {
@@ -61,7 +76,9 @@ export const TeamProvider = ({ children }) => {
   };
 
   return (
-    <TeamContext.Provider value={{ teams, loading, error, getAllTeamDetails, createTeam }}>
+    <TeamContext.Provider
+      value={{ teams, loading, error, getAllTeamDetails, createTeam }}
+    >
       {children}
     </TeamContext.Provider>
   );

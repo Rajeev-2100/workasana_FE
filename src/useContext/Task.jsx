@@ -1,4 +1,5 @@
 import { useState, createContext, useContext } from "react";
+import { toast } from "react-toastify"; 
 
 const TaskContext = createContext();
 
@@ -7,24 +8,32 @@ export const TaskProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const hostedUrl = "https://workAsana-be.vercel.app/api"
+  const hostedUrl = "https://workAsana-be.vercel.app/api";
+
   const getAllTaskDetails = async () => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found");
+
       const response = await fetch(`${hostedUrl}/all-task`, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to fetch tasks");
-      setTasks(data.data);
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch tasks");
+      }
+      
+      setTasks(data.data || []);
       return data.data;
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
       console.error("Task Fetch Error:", error);
       throw error;
     } finally {
@@ -36,21 +45,29 @@ export const TaskProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found");
+
       const response = await fetch(`${hostedUrl}/add-task`, {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` 
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(taskData),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to create task");
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to create task");
+      }
+      
+      toast.success("New Task added successfully");
       setTasks((prev) => [...prev, data.data]);
       return data.data;
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
       console.error("Create Task Error:", error);
       throw error;
     } finally {
@@ -62,20 +79,27 @@ export const TaskProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found");
+
       const response = await fetch(`${hostedUrl}/delete-task/${taskId}`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}` 
+          Authorization: `Bearer ${token}`,
         },
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to delete task");
       
-      setTasks((prev) => prev.filter(t => t._id !== taskId));
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to delete task");
+      }
+
+      toast.success("Task deleted successfully");
+      setTasks((prev) => prev.filter((t) => t._id !== taskId));
       return data;
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
       throw error;
     } finally {
       setLoading(false);
@@ -86,22 +110,29 @@ export const TaskProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found");
+
       const response = await fetch(`${hostedUrl}/update-task/${taskId}`, {
         method: "PUT",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` 
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(updateData),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to update task");
       
-      setTasks((prev) => prev.map(t => t._id === taskId ? data.data : t));
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to update task");
+      }
+
+      toast.success("Task updated successfully");
+      setTasks((prev) => prev.map((t) => (t._id === taskId ? data.data : t)));
       return data.data;
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
       throw error;
     } finally {
       setLoading(false);
@@ -109,7 +140,17 @@ export const TaskProvider = ({ children }) => {
   };
 
   return (
-    <TaskContext.Provider value={{ tasks, loading, error, getAllTaskDetails, createTask, deleteTask, updateTask }}>
+    <TaskContext.Provider
+      value={{
+        tasks,
+        loading,
+        error,
+        getAllTaskDetails,
+        createTask,
+        deleteTask,
+        updateTask,
+      }}
+    >
       {children}
     </TaskContext.Provider>
   );

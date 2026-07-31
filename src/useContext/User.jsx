@@ -1,18 +1,22 @@
 import { createContext, useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 export const UserContext = createContext();
 
-// ✅ Helper function to get user synchronously from localStorage
-// This runs immediately on first render, preventing the "flash of login page"
 const getInitialUser = () => {
   try {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
-    
-    if (token && storedUser && storedUser !== "undefined" && storedUser !== "null") {
+
+    if (
+      token &&
+      storedUser &&
+      storedUser !== "undefined" &&
+      storedUser !== "null"
+    ) {
       const parsedUser = JSON.parse(storedUser);
       const validId = parsedUser?._id || parsedUser?.id;
-      
+
       if (validId && validId !== "undefined" && validId !== "null") {
         return {
           ...parsedUser,
@@ -21,29 +25,36 @@ const getInitialUser = () => {
         };
       }
     }
-    
   } catch (error) {
     console.error("Failed to parse user from localStorage:", error);
   }
-  
-  // Cleanup if data is corrupted or missing
+
   localStorage.removeItem("user");
   localStorage.removeItem("token");
   return null;
 };
 
 export const UserProvider = ({ children }) => {
-  // ✅ FIX: Lazy initialization prevents flickering
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [user, setUser] = useState(getInitialUser);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isSignup, setIsSignup] = useState(true);
+  const [messageType, setMessageType] = useState("");
 
-  const hostedUrl = "https://workAsana-be.vercel.app/api"
+  const hostedUrl = "https://workAsana-be.vercel.app/api";
+
   // User Register
-  const register = async (name, email, password) => {
-    setLoading(true);
-    setError(null);
+  const handleSignup = async () => {
+    if (!name || !email || !password) {
+      toast.error("Please enter name, email, and password");
+      setMessageType("error");
+      return;
+    }
     try {
       const response = await fetch(`${hostedUrl}/add-user`, {
         method: "POST",
@@ -51,33 +62,33 @@ export const UserProvider = ({ children }) => {
         body: JSON.stringify({ name, email, password }),
       });
       const data = await response.json();
-      
-      if (!response.ok) throw new Error(data.error || "Registration failed");
-
-      const userData = {
-        id: data?.user?.id || data?.user?._id,
-        _id: data?.user?._id || data?.user?.id,
-        name: data?.user?.name || "",
-        email: data?.user?.email || "",
-        role: data?.user?.role || "admin",
-      };
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
-      return data;
+      if (response.ok) {
+        toast.success("Signup Successful. Please Login.");
+        setMessageType("success");
+        setIsSignup(false);
+        localStorage.setItem("token", data?.token);
+        localStorage.setItem("user", JSON.stringify(data?.user));
+        setName("");
+        setEmail("");
+        setPassword("");
+      } else {
+        toast.error(data.error || "Signup failed");
+        setMessage(data.error || "Signup failed");
+        setMessageType("error");
+      }
     } catch (error) {
-      setError(error.message);
-      throw error;
-    } finally {
-      setLoading(false);
+      toast.error("Network Error. Please try again.");
+      setMessageType("error");
     }
   };
 
   // User Login
-  const login = async (email, password) => {
-    setLoading(true);
-    setError(null);
+  const handleLogin = async () => {
+    if (!email || !password) {
+      toast.error("Please enter email and password");
+      setMessageType("error");
+      return;
+    }
     try {
       const response = await fetch(`${hostedUrl}/login`, {
         method: "POST",
@@ -85,26 +96,21 @@ export const UserProvider = ({ children }) => {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      
-      if (!response.ok) throw new Error(data.error || "Login failed");
-
-      const userData = {
-        id: data?.user?.id || data?.user?._id,
-        _id: data?.user?._id || data?.user?.id,
-        name: data?.user?.name || "",
-        email: data?.user?.email || "",
-        role: data?.user?.role || "user",
-      };
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
-      return data;
+      if (response.ok) {
+        toast.success("Login Successful");
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setMessage("Login Successful");
+        setMessageType("success");
+        navigate("/dashboardPage");
+      } else {
+        toast.error(data.error || "Login failed");
+        setMessage(data.error || "Login failed");
+        setMessageType("error");
+      }
     } catch (error) {
-      setError(error.message);
-      throw error;
-    } finally {
-      setLoading(false);
+      toast.error("Network Error. Please try again.");
+      setMessageType("error");
     }
   };
 
@@ -144,7 +150,9 @@ export const UserProvider = ({ children }) => {
     setError(null);
     try {
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("No authentication token found");
+      if (!token) {
+        toast.error("No authentication token found");
+      }
 
       const response = await fetch(`${hostedUrl}/update-user/${userId}`, {
         method: "PUT",
@@ -156,7 +164,11 @@ export const UserProvider = ({ children }) => {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to update profile");
+      if (!response.ok) {
+        toast.error(data.error || "Failed to update profile");
+      }
+
+      toast.success("Profile updated successfully");
 
       const updatedUser = {
         ...user,
@@ -183,7 +195,9 @@ export const UserProvider = ({ children }) => {
     setError(null);
     try {
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("No authentication token found");
+      if (!token) {
+        toast.error("No authentication token found");
+      }
 
       const response = await fetch(`${hostedUrl}/change-password/${userId}`, {
         method: "PUT",
@@ -193,9 +207,12 @@ export const UserProvider = ({ children }) => {
         },
         body: JSON.stringify({ currentPassword, newPassword }),
       });
-      
+
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to change password");
+      if (!response.ok) {
+        toast.error("Failed to change password");
+      }
+      toast.success("Password change successfully");
       return data;
     } catch (error) {
       setError(error.message);
@@ -211,16 +228,20 @@ export const UserProvider = ({ children }) => {
     setError(null);
     try {
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("No authentication token found");
+      if (!token) {
+        toast.error("No authentication token found");
+      }
 
       const response = await fetch(`${hostedUrl}/delete-user/${userId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to delete account");
 
+      const data = await response.json();
+      if (!response.ok) {
+        toast.error("Failed to delete account");
+      }
+      toast.success("User detail deleted successfully");
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       setUser(null);
@@ -248,8 +269,23 @@ export const UserProvider = ({ children }) => {
         users,
         loading,
         error,
-        login,
-        register,
+        name,
+        email,
+        password,
+        isSignup,
+        message,
+        messageType,
+        hostedUrl,
+
+        setName,
+        setEmail,
+        setPassword,
+        setIsSignup,
+        setMessage,
+        setMessageType,
+
+        handleSignup,
+        handleLogin,
         getAllUserDetails,
         updateProfile,
         changePassword,

@@ -1,87 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import UserContext from "./useContext/User";
 
 function App() {
   const navigate = useNavigate();
-  const [isSignup, setIsSignup] = useState(true);
   const hostedUrl = "https://workAsana-be.vercel.app/api";
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
-
-  const handleSignup = async () => {
-    if (!name || !email || !password) {
-      toast.error("Please enter name, email, and password"); 
-      setMessage("Please enter name, email, and password");
-      setMessageType("error");
-      return;
-    }
-    try {
-      const response = await fetch(`${hostedUrl}/add-user`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        toast.success("Signup Successful. Please Login.");
-        setMessage("Signup Successful. Please Login.");
-        setMessageType("success");
-        setIsSignup(false);
-        localStorage.setItem("token", data?.token);
-        localStorage.setItem("user", JSON.stringify(data?.user));
-        setName("");
-        setEmail("");
-        setPassword("");
-      } else {
-        toast.error(data.error || "Signup failed"); 
-        setMessage(data.error || "Signup failed");
-        setMessageType("error");
-      }
-    } catch (error) {
-      toast.error("Network Error. Please try again."); 
-      setMessage("Network Error. Please try again.");
-      setMessageType("error");
-    }
-  };
-
-  const handleLogin = async () => {
-    if (!email || !password) {
-      toast.error("Please enter email and password"); 
-      setMessage("Please enter email and password");
-      setMessageType("error");
-      return;
-    }
-    try {
-      const response = await fetch(`${hostedUrl}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        toast.success("Login Successful"); 
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        setMessage("Login Successful");
-        setMessageType("success");
-        navigate("/dashboardPage");
-      } else {
-        toast.error(data.error || "Login failed"); 
-        setMessage(data.error || "Login failed");
-        setMessageType("error");
-      }
-    } catch (error) {
-      toast.error("Network Error. Please try again."); 
-      setMessage("Network Error. Please try again.");
-      setMessageType("error");
-    }
-  };
-
+  const { name, email, password, isSignup, message, messageType, handleSignup, handleLogin, setName, setEmail, setPassword, setIsSignup, setMessage } = useContext(UserContext);
+  
   return (
     <main
       className="d-flex justify-content-center align-items-center"
@@ -171,4 +98,5 @@ function App() {
     </main>
   );
 }
+
 export default App;
