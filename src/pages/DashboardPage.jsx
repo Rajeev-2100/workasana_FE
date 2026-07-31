@@ -241,8 +241,8 @@ const DashboardPage = () => {
   return (
     <>
       <Header />
-      <div className="d-flex flex-column min-vh-100">
-        <main className="flex-grow-1 container-fluid p-0 position-relative">
+      <main className="d-flex flex-column min-vh-100">
+        <div className="flex-grow-1 container-fluid p-0 position-relative">
           <div
             style={{
               filter: isAnyModalOpen ? "blur(4px)" : "none",
@@ -907,10 +907,8 @@ const DashboardPage = () => {
               </div>
             </div>
           )}
-        </main>
-
-        <Footer />
-      </div>
+        </div>
+      </main>
       <Footer />
     </>
   );
