@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from 'react-router'
+import { useNavigate } from "react-router";
 
 export const UserContext = createContext();
 
@@ -46,6 +46,7 @@ export const UserProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [isSignup, setIsSignup] = useState(true);
   const [messageType, setMessageType] = useState("");
+  const [message, setMessage] = useState("");
 
   const hostedUrl = "https://workAsana-be.vercel.app/api";
 
@@ -274,7 +275,6 @@ export const UserProvider = ({ children }) => {
         email,
         password,
         isSignup,
-        message,
         messageType,
         hostedUrl,
 
