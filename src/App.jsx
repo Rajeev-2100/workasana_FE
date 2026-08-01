@@ -1,34 +1,32 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useContext } from "react";
 import UserContext from "./useContext/User";
 
 function App() {
-  const navigate = useNavigate();
-  const hostedUrl = "https://workAsana-be.vercel.app/api";
-  const { name, email, password, isSignup, message, messageType, handleSignup, handleLogin, setName, setEmail, setPassword, setIsSignup, setMessage } = useContext(UserContext);
+  const { 
+    name, email, password, isSignup, message, messageType, 
+    handleSignup, handleLogin, setName, setEmail, setPassword, 
+    setIsSignup, setMessage 
+  } = useContext(UserContext);
   
   return (
     <main
-      className="d-flex justify-content-center align-items-center"
-      style={{ width: "100%", height: "100vh", background: "#f5f5f5" }}
+      className="d-flex justify-content-center align-items-center p-3"
+      style={{ width: "100%", minHeight: "100vh", background: "#f5f5f5" }}
     >
-      <div className="bg-white shadow rounded p-4" style={{ width: "420px" }}>
+      <div className="bg-white shadow rounded p-4 w-100" style={{ maxWidth: "420px" }}>
         <h3 className="text-center text-primary mb-4">workAsana</h3>
         <h5>{isSignup ? "Create Account" : "Login"}</h5>
         <p className="text-muted">
-          {isSignup
-            ? "Please create your account."
-            : "Please login to continue."}
+          {isSignup ? "Please create your account." : "Please login to continue."}
         </p>
+        
         {message && (
-          <div
-            className={`alert ${messageType === "success" ? "alert-success" : "alert-danger"}`}
-          >
+          <div className={`alert ${messageType === "success" ? "alert-success" : "alert-danger"}`}>
             {message}
           </div>
         )}
+        
         {isSignup && (
           <>
             <label className="form-label">Name</label>
@@ -41,6 +39,7 @@ function App() {
             />
           </>
         )}
+        
         <label className="form-label">Email</label>
         <input
           className="form-control mb-3"
@@ -49,6 +48,7 @@ function App() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+        
         <label className="form-label">Password</label>
         <input
           className="form-control mb-3"
@@ -57,6 +57,7 @@ function App() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        
         {isSignup ? (
           <>
             <button className="btn btn-primary w-100" onClick={handleSignup}>
@@ -65,7 +66,7 @@ function App() {
             <p className="text-center mt-3">
               Already have an account?{" "}
               <button
-                className="btn btn-link"
+                className="btn btn-link p-0 align-baseline"
                 onClick={() => {
                   setIsSignup(false);
                   setMessage("");
@@ -83,7 +84,7 @@ function App() {
             <p className="text-center mt-3">
               Don't have an account?{" "}
               <button
-                className="btn btn-link"
+                className="btn btn-link p-0 align-baseline"
                 onClick={() => {
                   setIsSignup(true);
                   setMessage("");

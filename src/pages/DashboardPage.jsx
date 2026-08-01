@@ -259,7 +259,7 @@ const DashboardPage = () => {
                 <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-4 h-100 min-vh-100 position-relative">
                   <Link
                     to="/dashboardPage"
-                    className="d-flex align-items-center pb-3 mb-md-4 me-md-auto text-decoration-none w-100"
+                    className="d-flex align-items-center pb-3 mb-md-4 me-md-auto text-decoration-none w-100 justify-content-center justify-content-sm-start"
                   >
                     <span
                       className="fs-3 fw-bold d-none d-sm-inline"
@@ -267,62 +267,67 @@ const DashboardPage = () => {
                     >
                       workAsana
                     </span>
+                    {/* Added icon for mobile view when text is hidden */}
+                    <i
+                      className="bi bi-list fs-2 d-sm-none"
+                      style={{ color: "#3720e5" }}
+                    ></i>
                   </Link>
 
-                  <ul className="nav flex-column px-3 gap-1 mt-3">
-                    <li className="nav-item">
+                  <ul className="nav flex-column px-3 gap-1 mt-3 w-100">
+                    <li className="nav-item w-100">
                       <Link
                         to="/dashboardPage"
-                        className="nav-link text-primary py-2 px-3 rounded d-flex align-items-center"
+                        className="nav-link text-primary py-2 px-3 rounded d-flex align-items-center justify-content-center justify-content-sm-start"
                         style={{ backgroundColor: "#e8e0ff", color: "#6c5ce7" }}
                       >
-                        <i className="bi bi-speedometer2 me-2"></i>
-                        <span>Dashboard</span>
+                        <i className="bi bi-speedometer2 me-sm-2"></i>
+                        <span className="d-none d-sm-inline">Dashboard</span>
                       </Link>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item w-100">
                       <Link
                         to="/projects"
-                        className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                        className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center justify-content-center justify-content-sm-start"
                       >
-                        <i className="bi bi-folder me-2"></i>
-                        <span>Project</span>
+                        <i className="bi bi-folder me-sm-2"></i>
+                        <span className="d-none d-sm-inline">Project</span>
                       </Link>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item w-100">
                       <Link
                         to="/tasks"
-                        className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                        className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center justify-content-center justify-content-sm-start"
                       >
-                        <i className="bi bi-journal-check me-2"></i>
-                        <span>Task</span>
+                        <i className="bi bi-journal-check me-sm-2"></i>
+                        <span className="d-none d-sm-inline">Task</span>
                       </Link>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item w-100">
                       <Link
                         to="/teams"
-                        className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                        className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center justify-content-center justify-content-sm-start"
                       >
-                        <i className="bi bi-people me-2"></i>
-                        <span>Team</span>
+                        <i className="bi bi-people me-sm-2"></i>
+                        <span className="d-none d-sm-inline">Team</span>
                       </Link>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item w-100">
                       <Link
                         to="/reports"
-                        className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                        className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center justify-content-center justify-content-sm-start"
                       >
-                        <i className="bi bi-graph-up me-2"></i>
-                        <span>Reports</span>
+                        <i className="bi bi-graph-up me-sm-2"></i>
+                        <span className="d-none d-sm-inline">Reports</span>
                       </Link>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item w-100">
                       <Link
                         to="/setting"
-                        className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center"
+                        className="nav-link text-secondary py-2 px-3 rounded d-flex align-items-center justify-content-center justify-content-sm-start"
                       >
-                        <i className="bi bi-gear me-2"></i>
-                        <span>Setting</span>
+                        <i className="bi bi-gear me-sm-2"></i>
+                        <span className="d-none d-sm-inline">Setting</span>
                       </Link>
                     </li>
                   </ul>
@@ -348,10 +353,11 @@ const DashboardPage = () => {
               </div>
 
               {/* Main Content Area */}
-              <div className="col p-5 bg-white">
+              {/* Changed padding to be responsive: p-3 on mobile, p-5 on large screens */}
+              <div className="col p-3 p-md-4 p-lg-5 bg-white">
                 {/* Search Bar */}
                 <div className="mb-4">
-                  <div className="input-group shadow-sm overflow-hidden w-100 p-3">
+                  <div className="input-group shadow-sm overflow-hidden w-100 p-2 p-md-3">
                     <input
                       type="text"
                       className="form-control py-2 ps-4"
@@ -377,8 +383,9 @@ const DashboardPage = () => {
 
                 {/* Projects Section */}
                 <div className="mb-5">
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <div className="d-flex align-items-center gap-3">
+                  {/* Changed to flex-column on mobile, flex-row on sm+ */}
+                  <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+                    <div className="d-flex align-items-center gap-3 flex-wrap">
                       <h4 className="m-0 fw-bold text-dark">Projects</h4>
                       <select
                         className="form-select form-select-sm"
@@ -408,12 +415,11 @@ const DashboardPage = () => {
                   {projects && projects.length > 0 ? (
                     <>
                       <div className="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3">
-                        {/* ✅ FIXED: Correct Link navigation and key placement */}
                         {displayProjects.map((project, index) => (
                           <div key={project._id || index} className="col">
                             <Link
                               to={`/projects/${project._id}`}
-                              className="text-decoration-none text-dark"
+                              className="text-decoration-none text-dark h-100"
                             >
                               <div className="card h-100 border-0 shadow-sm p-3 bg-light">
                                 <span
@@ -475,8 +481,9 @@ const DashboardPage = () => {
 
                 {/* Tasks Section */}
                 <div className="mb-4">
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <div className="d-flex align-items-center gap-3">
+                  {/* Changed to flex-column on mobile, flex-row on sm+ */}
+                  <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+                    <div className="d-flex align-items-center gap-3 flex-wrap">
                       <h4 className="m-0 fw-bold text-dark">My Tasks</h4>
                       <select
                         className="form-select form-select-sm"
@@ -505,12 +512,11 @@ const DashboardPage = () => {
                   {filteredTasks.length > 0 ? (
                     <>
                       <div className="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3">
-                        {/* ✅ FIXED: Made Task cards clickable with Link */}
                         {displayTasks.map((task) => (
                           <div key={task._id} className="col">
                             <Link
                               to={`/tasks/${task._id}`}
-                              className="text-decoration-none text-dark"
+                              className="text-decoration-none text-dark h-100"
                             >
                               <div className="card h-100 border-0 shadow-sm p-3 bg-light">
                                 <span

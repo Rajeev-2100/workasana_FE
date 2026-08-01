@@ -1,13 +1,13 @@
 const Header = () => {
-    return (
-        <>
-            <header className="bg-seconday py-3">
-                <nav className="container text-center">
-                    <h4 className="fs-4 fw-bold">workAsana</h4>
-                </nav>
-            </header>
-        </>
-    )
-}
+  return (
+    <header className="py-3 border-bottom bg-white sticky-top shadow-sm">
+      <nav className="container d-flex justify-content-center align-items-center">
+        <h4 className="fs-4 fw-bold m-0" style={{ color: "#6c5ce7" }}>
+          workAsana
+        </h4>
+      </nav>
+    </header>
+  );
+};
 
-export default Header
+export default Header;
