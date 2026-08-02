@@ -73,6 +73,7 @@ export const UserProvider = ({ children }) => {
         setName("");
         setEmail("");
         setPassword("");
+        window.location.reload()
       } else {
         toast.error(data.error || "Signup failed");
         setMessage(data.error || "Signup failed");
@@ -102,7 +103,6 @@ export const UserProvider = ({ children }) => {
         toast.success("Login Successful");
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        setMessage("Login Successful");
         setMessageType("success");
         navigate("/dashboardPage");
       } else {
